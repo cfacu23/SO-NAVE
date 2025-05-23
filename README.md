@@ -4,14 +4,9 @@ Este repositorio contiene el desarrollo de un panel interactivo educativo que si
 
 🧠 ¿Qué es SO-NAVE?
 
-SO-NAVE es una propuesta didáctica pensada para estudiantes de 15 a 20 años.  
-El objetivo es **facilitar el aprendizaje de sistemas operativos** usando botones, sensores, luces y proyección de contenidos. Todo esto en un entorno físico que simula una cabina espacial.
-
-🎯 Objetivos del proyecto
-- 🧩 Hacer comprensibles los conceptos de procesos, memoria, E/S e interfaz usuario-hardware.  
-- 🎮 Diseñar una experiencia interactiva y multisensorial.  
-- ♿ Asegurar la accesibilidad para personas con fotosensibilidad (sin luces estroboscópicas).  
-- 🔁 Permitir pruebas reales de usabilidad educativa.
+  SO-NAVE es una propuesta didáctica pensada para estudiantes de 15 a 20 años.  
+  El objetivo es **facilitar el aprendizaje de sistemas operativos** usando botones, sensores, luces y proyección de contenidos. Todo esto en un entorno físico que simula una cabina espacial.
+  El proyecto SO-NAVE nace con la idea de hacer que los sistemas operativos se entiendan de verdad. Queremos que los estudiantes puedan aprender estos conceptos que muchas veces parecen súper teóricos, pero de una forma más visual, interactiva e inclusiva. La propuesta es representar cosas como los procesos, la memoria, la entrada y salida, o la relación entre el usuario y el hardware a través de un panel físico que se pueda tocar, ver, accionar, y que además tenga videomapping para reforzar lo que pasa. Todo está pensado como si fuera el interior de una nave espacial. También nos enfocamos en que sea accesible para todos, por eso evitamos luces fuertes o efectos que puedan afectar a personas con fotosensibilidad. No es solo aprender, es vivir la experiencia.
 
 🛠️ Tecnologías y materiales
 - ⚙️ **Arduino UNO**  
