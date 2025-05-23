@@ -1,7 +1,9 @@
 🚀 SO-NAVE: Panel Interactivo sobre Sistemas Operativos
+
 Este repositorio contiene el desarrollo de un panel interactivo educativo que simula una nave espacial para enseñar los conceptos fundamentales de los sistemas operativos de forma visual, práctica e inclusiva.
 
 🧠 ¿Qué es SO-NAVE?
+
 SO-NAVE es una propuesta didáctica pensada para estudiantes de 15 a 20 años.  
 El objetivo es **facilitar el aprendizaje de sistemas operativos** usando botones, sensores, luces y proyección de contenidos. Todo esto en un entorno físico que simula una cabina espacial.
 
