@@ -1,0 +1,63 @@
+// Reproduce la canción de Mario Bros al detectar una persona con el sensor
+
+const int TRIG = 9;
+const int ECHO = 10;
+const int pinBuzzer = 4;
+
+const int DISTANCIA_MINIMA = 30;
+
+void nota(int frecuencia, int duracion) {
+  tone(pinBuzzer, frecuencia, duracion);
+  delay(duracion * 1.30);
+  noTone(pinBuzzer);
+}
+
+void setup() {
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+  pinMode(pinBuzzer, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+
+  long duracion = pulseIn(ECHO, HIGH);
+  long distancia = duracion * 0.034 / 2;
+
+  if (distancia > 0 && distancia < DISTANCIA_MINIMA) {
+    // Mario Bros - versión extendida
+    nota(660, 100); nota(660, 100); delay(100);
+    nota(660, 100); delay(100);
+    nota(510, 100); nota(660, 100); delay(100);
+    nota(770, 100); delay(300);
+    nota(380, 100); delay(300);
+
+    nota(510, 100); delay(100);
+    nota(380, 100); delay(100);
+    nota(320, 100); delay(200);
+    nota(440, 100); delay(100);
+    nota(480, 80);  nota(450, 80); nota(430, 100); delay(100);
+    nota(380, 100); delay(100);
+    nota(660, 80);  nota(760, 50); nota(860, 100); delay(100);
+    nota(700, 80);  nota(760, 50); nota(660, 100); delay(100);
+    nota(520, 80);  nota(580, 80); nota(480, 100); delay(100);
+
+    nota(510, 100); delay(100);
+    nota(380, 100); delay(100);
+    nota(320, 100); delay(200);
+    nota(440, 100); delay(100);
+    nota(480, 80);  nota(450, 80); nota(430, 100); delay(100);
+    nota(380, 100); delay(100);
+    nota(660, 80);  nota(760, 50); nota(860, 100); delay(100);
+    nota(700, 80);  nota(760, 50); nota(660, 100); delay(100);
+    nota(520, 80);  nota(580, 80); nota(480, 100); delay(300);
+
+    while (true); // Se detiene después de tocar
+  }
+
+  delay(100);
+}
