@@ -21,3 +21,5 @@ Este repositorio contiene el desarrollo de un panel interactivo educativo que si
 2. Puede presionar botones o mover palancas → representan acciones del sistema operativo.  
 3. Se activan respuestas: luces, movimiento y proyección explicativa.  
 4. Todo controlado por Arduino y diseñado para ser claro, intuitivo y seguro.
+
+   Link a la carpeta del informe: https://correoucuedu-my.sharepoint.com/:f:/g/personal/facundon_rodriguez_correo_ucu_edu_uy/EnbEGr8fypJJlSLyHxLT6dwBqciX073Rmp4FXE6a6YljHw?e=xBuffQ
