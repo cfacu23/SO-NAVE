@@ -1,0 +1,13 @@
+const int botonPin = 2;
+
+void setup() {
+  pinMode(botonPin, INPUT_PULLUP);  // Usa resistencia interna
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (digitalRead(botonPin) == LOW) {  // LOW = botón presionado
+    Serial.println("BOTON1");
+    delay(300);
+  }
+}
