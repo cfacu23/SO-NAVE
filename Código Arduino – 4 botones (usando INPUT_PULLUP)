@@ -1,0 +1,18 @@
+const int botonPins[] = {2, 3, 4, 5};  // Pines para los 4 botones
+const char* mensajes[] = {"BOTON1", "BOTON2", "BOTON3", "BOTON4"};
+
+void setup() {
+  Serial.begin(9600);
+  for (int i = 0; i < 4; i++) {
+    pinMode(botonPins[i], INPUT_PULLUP);  // Usa resistencias internas
+  }
+}
+
+void loop() {
+  for (int i = 0; i < 4; i++) {
+    if (digitalRead(botonPins[i]) == LOW) {
+      Serial.println(mensajes[i]);
+      delay(300);  // Antirebote
+    }
+  }
+}
