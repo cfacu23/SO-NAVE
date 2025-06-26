@@ -1,0 +1,49 @@
+Código Processing – 4 teclas simuladas (1, 2, 3, 4)
+
+Este código, a diferencia del otro, permite que processing reciba la señal de 4 botones.
+
+import processing.serial.*;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
+Serial arduino;
+Robot robot;
+
+void setup() {
+  arduino = new Serial(this, "COM4", 9600);  // Cambiá COM si es necesario
+
+  try {
+    robot = new Robot();
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+
+void draw() {
+  while (arduino.available() > 0) {
+    String mensaje = arduino.readStringUntil('\n');
+
+    if (mensaje != null) {
+      mensaje = mensaje.trim();
+      println("Mensaje recibido: " + mensaje);
+
+      if (mensaje.equals("BOTON1")) {
+        robot.keyPress(KeyEvent.VK_1);
+        delay(100);
+        robot.keyRelease(KeyEvent.VK_1);
+      } else if (mensaje.equals("BOTON2")) {
+        robot.keyPress(KeyEvent.VK_2);
+        delay(100);
+        robot.keyRelease(KeyEvent.VK_2);
+      } else if (mensaje.equals("BOTON3")) {
+        robot.keyPress(KeyEvent.VK_3);
+        delay(100);
+        robot.keyRelease(KeyEvent.VK_3);
+      } else if (mensaje.equals("BOTON4")) {
+        robot.keyPress(KeyEvent.VK_4);
+        delay(100);
+        robot.keyRelease(KeyEvent.VK_4);
+      }
+    }
+  }
+}
