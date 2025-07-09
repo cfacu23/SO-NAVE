@@ -1,0 +1,35 @@
+#define TRIG_PIN 12
+#define ECHO_PIN 13
+const int ledPins[] = {11, 11, 8, 10, 10};
+const int DISTANCIA_UMBRAL = 200; // en centímetros
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  for (int i = 0; i < 5; i++) {
+    pinMode(ledPins[i], OUTPUT);
+  }
+}
+
+void loop() {
+  long duracion;
+  float distancia;
+
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  duracion = pulseIn(ECHO_PIN, HIGH, 30000); // evitar cuelgue
+  distancia = duracion * 0.034 / 2;
+
+  if (distancia > 0 && distancia <= DISTANCIA_UMBRAL) {
+    for (int i = 0; i < 5; i++) digitalWrite(ledPins[i], HIGH);
+  } else {
+    for (int i = 0; i < 5; i++) digitalWrite(ledPins[i], LOW);
+  }
+
+  delay(100); // opcional para estabilidad
+}
