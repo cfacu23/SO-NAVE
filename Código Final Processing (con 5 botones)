@@ -1,0 +1,49 @@
+import processing.serial.*;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.awt.AWTException;
+
+Serial puerto;
+Robot robot;
+
+void setup() {
+  println(Serial.list()); // Muestra los puertos disponibles
+
+  puerto = new Serial(this, Serial.list()[0], 9600); // Cambiá el [0] si es necesario
+
+  try {
+    robot = new Robot();
+  } catch (AWTException e) {
+    println("Error al crear Robot: " + e.getMessage());
+    exit(); // salir del programa si falla
+  }
+}
+
+void draw() {
+  while (puerto.available() > 0) {
+    String mensaje = puerto.readStringUntil('\n');
+
+    if (mensaje != null) {
+      mensaje = mensaje.trim();
+      println("Recibido: " + mensaje);
+
+      if (mensaje.equals("BOTON1")) {
+        presionarTecla(KeyEvent.VK_1);
+      } else if (mensaje.equals("BOTON2")) {
+        presionarTecla(KeyEvent.VK_2);
+      } else if (mensaje.equals("BOTON3")) {
+        presionarTecla(KeyEvent.VK_3);
+      } else if (mensaje.equals("BOTON4")) {
+        presionarTecla(KeyEvent.VK_4);
+      } else if (mensaje.equals("BOTON5")) {
+        presionarTecla(KeyEvent.VK_5);
+      }
+    }
+  }
+}
+
+void presionarTecla(int tecla) {
+  robot.keyPress(tecla);
+  delay(100);
+  robot.keyRelease(tecla);
+}
