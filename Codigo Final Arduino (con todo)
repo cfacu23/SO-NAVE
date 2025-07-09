@@ -1,0 +1,143 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <Servo.h>
+
+// --- Pines y variables ---
+const int botonPins[] = {2, 3, 4, 5};  // Botones 1 al 4
+const char* mensajes[] = {"BOTON1", "BOTON2", "BOTON3", "BOTON4"};
+const char* textosLCD[] = {
+  "SO: Coordina todo",        // Botón 1
+  "Procesa ordenes",          // Botón 2
+  "Entrada/Salida",           // Botón 3
+  "RAM: Datos temporales"     // Botón 4
+};
+
+const int buzzerPin = 9;
+const int potPin = A0;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+Servo servo;
+int servoPos = 0;
+int servoDir = 1;
+unsigned long lastServoMove = 0;
+const int servoInterval = 15;
+
+// --- Sensor ultrasónico (Botón 5) ---
+#define TRIG_PIN 12
+#define ECHO_PIN 13
+#define DISTANCIA_UMBRAL 200
+const int ledPins[] = {11, 11, 8, 10, 10};  // 5 LEDs
+unsigned long ultimoSensorActivado = 0;
+const unsigned long BLOQUEO_SENSOR = 130000; // 130 segundos
+
+int tonoActual = 300;
+bool subiendo = true;
+unsigned long ultimoCambioTono = 0;
+const int intervaloTono = 30;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Panel iniciado");
+
+  for (int i = 0; i < 4; i++) {
+    pinMode(botonPins[i], INPUT_PULLUP);
+  }
+
+  pinMode(buzzerPin, OUTPUT);
+  servo.attach(6);
+
+  // Sensor y LEDs
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  for (int i = 0; i < 5; i++) {
+    pinMode(ledPins[i], OUTPUT);
+  }
+}
+
+void loop() {
+  unsigned long now = millis();
+
+  // --- Servo automático ---
+  if (now - lastServoMove >= servoInterval) {
+    servoPos += servoDir;
+    if (servoPos >= 180 || servoPos <= 0) {
+      servoDir *= -1;
+    }
+    servo.write(servoPos);
+    lastServoMove = now;
+  }
+
+  // --- Botones 1 a 4 ---
+  for (int i = 0; i < 4; i++) {
+    static bool lastState[4] = {HIGH, HIGH, HIGH, HIGH};
+    bool currentState = digitalRead(botonPins[i]) == LOW;
+
+    if (currentState && lastState[i]) {
+      Serial.println(mensajes[i]);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print(textosLCD[i]);
+
+      if (strlen(textosLCD[i]) > 16) {
+        lcd.clear();
+        String texto = textosLCD[i];
+        lcd.setCursor(0, 0);
+        lcd.print(texto.substring(0, 16));
+        lcd.setCursor(0, 1);
+        lcd.print(texto.substring(16));
+      } else {
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
+      }
+    }
+    lastState[i] = currentState;
+  }
+
+  // --- Buzzer con interferencia suave (sube y baja tono) controlado por potenciómetro ---
+  int potValue = analogRead(potPin);
+  if (potValue > 100) {
+    if (now - ultimoCambioTono >= intervaloTono) {
+      if (subiendo) {
+        tonoActual += 10;
+        if (tonoActual >= 1000) subiendo = false;
+      } else {
+        tonoActual -= 10;
+        if (tonoActual <= 300) subiendo = true;
+      }
+      tone(buzzerPin, tonoActual);
+      ultimoCambioTono = now;
+    }
+  } else {
+    noTone(buzzerPin);
+  }
+
+  // --- Sensor ultrasónico (Botón 5) ---
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duracion = pulseIn(ECHO_PIN, HIGH, 30000);
+  float distancia = duracion * 0.034 / 2;
+  unsigned long tiempoActual = millis();
+
+  if (distancia > 0 && distancia <= DISTANCIA_UMBRAL) {
+    for (int i = 0; i < 5; i++) digitalWrite(ledPins[i], HIGH);
+
+    if (tiempoActual - ultimoSensorActivado >= BLOQUEO_SENSOR) {
+      Serial.println("BOTON5");
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Iniciando nave...");
+      lcd.setCursor(0, 1);
+      lcd.print("Presencia activa");
+      ultimoSensorActivado = tiempoActual;
+    }
+  } else {
+    for (int i = 0; i < 5; i++) digitalWrite(ledPins[i], LOW);
+  }
+}
